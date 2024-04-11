@@ -1,12 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
 
+import { stex } from "@codemirror/legacy-modes/mode/stex";
+
 import {
   EditorView,
   keymap,
   drawSelection,
   dropCursor,
 } from "@codemirror/view";
-import { markdown } from "@codemirror/lang-markdown";
+//import { markdown } from "@codemirror/lang-markdown";
 import { languages } from "@codemirror/language-data";
 
 import { Prop } from "@automerge/automerge";
@@ -18,7 +20,9 @@ import { indentWithTab } from "@codemirror/commands";
 import { type DocHandle } from "@automerge/automerge-repo";
 import { CommentThreadForUI, MarkdownDoc } from "../schema";
 import {
+  StreamLanguage,
   syntaxHighlighting,
+  defaultHighlightStyle,
   indentOnInput,
   foldKeymap,
   indentUnit,
@@ -96,6 +100,8 @@ export function MarkdownEditor({
         // In the future we might want to bring it back though.
         // drawSelection(),
 
+        StreamLanguage.define(stex),
+        syntaxHighlighting(defaultHighlightStyle, { fallback: true }),
         dropCursor(),
         indentOnInput(),
         keymap.of([
@@ -109,22 +115,22 @@ export function MarkdownEditor({
         ]),
         EditorView.lineWrapping,
         essayTheme,
-        markdown({
-          codeLanguages: languages,
-        }),
+        //markdown({
+        //  codeLanguages: languages,
+        //}),
         indentUnit.of("    "),
-        syntaxHighlighting(markdownStyles),
+        //syntaxHighlighting(markdownStyles),
 
         // Now our custom stuff: Automerge collab, comment threads, etc.
         automergePlugin,
-        frontmatterPlugin,
+        //frontmatterPlugin,
         threadsField,
         threadDecorations,
-        previewFiguresPlugin,
-        highlightKeywordsPlugin,
-        tableOfContentsPreviewPlugin,
-        codeMonospacePlugin,
-        lineWrappingPlugin,
+        //previewFiguresPlugin,
+        //highlightKeywordsPlugin,
+        //tableOfContentsPreviewPlugin,
+        //codeMonospacePlugin,
+        //lineWrappingPlugin,
       ],
       dispatch(transaction, view) {
         // TODO: can some of these dispatch handlers be factored out into plugins?
